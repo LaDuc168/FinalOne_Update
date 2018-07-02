@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:padding="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:text="Nhập tên tài khoản" />
+
+    <EditText
+
+        android:id="@+id/edtten"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/custom_edittext" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:text="Nhập mật khẩu tài khoản" />
+
+    <EditText
+
+        android:id="@+id/edtmk"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/custom_edittext" />
+
+    <ru.katso.livebutton.LiveButton
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/btnXoa"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Xóa"
+        android:textColor="#0b0b0b"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:backgroundColor="#ffcc00"
+        app:corners="0sp"
+        app:normalHeight="5dp"
+        app:pressedHeight="2dp"
+        app:shadowColor="#b7bac9" />
+
+</LinearLayout>
