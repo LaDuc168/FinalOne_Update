@@ -59,9 +59,7 @@ public class DanhSachThanhPhoActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 int index = mangTP.get(i).lastIndexOf("-");
-
                 String s = mangTP.get(i).substring((index + 1));
-
                 MA_KHU_VUC = s;
 
                 registerForContextMenu(listView);

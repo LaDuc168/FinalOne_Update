@@ -14,8 +14,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.phamvolan.finalone.MainActivity;
 import com.example.phamvolan.finalone.R;
 import com.example.phamvolan.finalone.ipaddress.IPConnect;
+import com.example.phamvolan.finalone.model.ConstanDataManager;
 import com.example.phamvolan.finalone.model.KhuVuc;
 
 import java.util.HashMap;
@@ -28,6 +30,7 @@ public class ThemKhuVucActivity extends AppCompatActivity {
 
     EditText edtmakv, edttenkv;
     LiveButton btnThem, btnHuy;
+    String RESULE_ACTIVITY="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class ThemKhuVucActivity extends AppCompatActivity {
         setContentView(R.layout.activity_them_khu_vuc);
 
         init();
+        RESULE_ACTIVITY=getIntent().getStringExtra(ConstanDataManager.VARIABLE_TRANSLATE);
 
         addEvent();
 
@@ -77,8 +81,14 @@ public class ThemKhuVucActivity extends AppCompatActivity {
                     Toast.makeText(ThemKhuVucActivity.this, "Thêm thất bại", Toast.LENGTH_SHORT).show();
                 }
 
-                startActivity(new Intent(ThemKhuVucActivity.this,DanhSachThanhPhoActivity.class));
-                finish();
+                if(RESULE_ACTIVITY.equals(ConstanDataManager.VALUE_GRAPH)){
+                    startActivity(new Intent(ThemKhuVucActivity.this,MainActivity.class));
+                    finish();
+                }else if(RESULE_ACTIVITY.equals(ConstanDataManager.VALUE_TABLE)){
+                    startActivity(new Intent(ThemKhuVucActivity.this,BangDiaChatActivity.class));
+                    finish();
+                }
+
             }
         },
                 new Response.ErrorListener() {

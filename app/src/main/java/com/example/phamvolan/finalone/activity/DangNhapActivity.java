@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.phamvolan.finalone.MainActivity;
 import com.example.phamvolan.finalone.R;
 import com.example.phamvolan.finalone.ipaddress.IPConnect;
 import com.example.phamvolan.finalone.ipaddress.Temp;
@@ -102,6 +103,7 @@ public class DangNhapActivity extends AppCompatActivity {
                 dialog.setContentView(R.layout.xoa_tai_khoan);
                 dialog.setTitle("Xóa tài khoản");
 
+
                 final EditText edtten = dialog.findViewById(R.id.edtten);
                 final EditText edtmk = dialog.findViewById(R.id.edtmk);
 
@@ -181,7 +183,7 @@ public class DangNhapActivity extends AppCompatActivity {
                             Toast.makeText(DangNhapActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 //                            if (!TempAccount.ACCOUNT.equals(TempAccount.BAN_LANH_DAO) &&
 //                                    !TempAccount.ACCOUNT.equals(TempAccount.NHAN_VIEN_TO_CHUC)){
-                            startActivity(new Intent(DangNhapActivity.this, DanhSachThanhPhoActivity.class));
+                            startActivity(new Intent(DangNhapActivity.this, MainActivity.class));
 //                            }else
                         }
                     }.start();
@@ -225,7 +227,7 @@ public class DangNhapActivity extends AppCompatActivity {
                     dialog.setMessage("Đang xử lý....");
                     dialog.setCanceledOnTouchOutside(false);//click ra ngoài vẫn ko tắt
                     dialog.show();
-                    new CountDownTimer(3000, 1000) {
+                    new CountDownTimer(4000, 1000) {
                         @Override
                         public void onTick(long millisUntilFinished) {
 

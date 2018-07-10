@@ -1,38 +1,28 @@
 package com.example.phamvolan.finalone.model;
 
 public class DateGraph {
-    private String date;
-    private int gioBD;
-    private int gioKT;
+    private String dateBD;
+    private String dateKT;
 
-    public String getDate() {
-        return date;
+    public String getDateBD() {
+        return dateBD;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDateBD(String dateBD) {
+        this.dateBD = dateBD;
     }
 
-    public int getGioBD() {
-        return gioBD;
+    public String getDateKT() {
+        return dateKT;
     }
 
-    public void setGioBD(int gioBD) {
-        this.gioBD = gioBD;
+    public void setDateKT(String dateKT) {
+        this.dateKT = dateKT;
     }
 
-    public int getGioKT() {
-        return gioKT;
-    }
+    public DateGraph(String dateBD, String dateKT) {
 
-    public void setGioKT(int gioKT) {
-        this.gioKT = gioKT;
-    }
-
-    public DateGraph(String date, int gioBD, int gioKT) {
-
-        this.date = date;
-        this.gioBD = gioBD;
-        this.gioKT = gioKT;
+        this.dateBD = dateBD;
+        this.dateKT = dateKT;
     }
 }

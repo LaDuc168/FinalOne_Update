@@ -23,6 +23,7 @@ import com.example.phamvolan.finalone.MainActivity;
 import com.example.phamvolan.finalone.R;
 import com.example.phamvolan.finalone.adapter.ThanhPhoAdapter;
 import com.example.phamvolan.finalone.ipaddress.IPConnect;
+import com.example.phamvolan.finalone.model.ConstanDataManager;
 import com.example.phamvolan.finalone.model.TramSelect;
 
 import org.json.JSONArray;
@@ -47,14 +48,14 @@ public class ThemTramActivity extends AppCompatActivity {
     ArrayAdapter<String > adapterKhuVuc;
     ArrayList<String > mangKhuVuc;
 
-
+    String RESULE_ACTIVITY="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_them_tram);
         init();
-
+        RESULE_ACTIVITY=getIntent().getStringExtra(ConstanDataManager.VARIABLE_TRANSLATE);
         addEvent();
 
         getDanhSachKhuVuc(IPConnect.GET_DANH_SACH_TRAM);
@@ -118,8 +119,13 @@ public class ThemTramActivity extends AppCompatActivity {
                     Toast.makeText(ThemTramActivity.this, "Thêm thất bại", Toast.LENGTH_SHORT).show();
                 }
 
-                startActivity(new Intent(ThemTramActivity.this,DanhSachThanhPhoActivity.class));
-                finish();
+                if(RESULE_ACTIVITY.equals(ConstanDataManager.VALUE_GRAPH)){
+                    startActivity(new Intent(ThemTramActivity.this,MainActivity.class));
+                    finish();
+                }else if(RESULE_ACTIVITY.equals(ConstanDataManager.VALUE_TABLE)){
+                    startActivity(new Intent(ThemTramActivity.this,BangDiaChatActivity.class));
+                    finish();
+                }
             }
         },
                 new Response.ErrorListener() {

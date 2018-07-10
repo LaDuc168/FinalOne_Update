@@ -2,28 +2,42 @@ package com.example.phamvolan.finalone;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.phamvolan.finalone.activity.BangDiaChatActivity;
 import com.example.phamvolan.finalone.activity.DangNhapActivity;
+import com.example.phamvolan.finalone.activity.DanhSachThanhPhoActivity;
+import com.example.phamvolan.finalone.activity.ThemKhuVucActivity;
+import com.example.phamvolan.finalone.activity.ThemTramActivity;
 import com.example.phamvolan.finalone.ipaddress.IPConnect;
+import com.example.phamvolan.finalone.ipaddress.Temp;
+import com.example.phamvolan.finalone.model.ConstanDataManager;
 import com.example.phamvolan.finalone.model.DateCompare;
 import com.example.phamvolan.finalone.model.DateGraph;
+import com.example.phamvolan.finalone.model.Date_Custom;
 import com.example.phamvolan.finalone.model.MyDate;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
@@ -37,6 +51,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import ru.katso.livebutton.LiveButton;
 
@@ -64,25 +80,193 @@ public class MainActivity extends AppCompatActivity {
 
     //Khai báo biến ngày giờ
 
-    EditText edtngay, edtgiobatdau, edtgioketthuc;
+    EditText edtngayBD, edtngayKT,edtType;
     LiveButton btnOk;
 
     DateGraph dateGraph = null;
     private static int MY_TYPE = 0;
+
+
+    Spinner spinnerKV;
+    ArrayList<String> mangSpinnerKV;
+    ArrayAdapter adapterSpinnerKV;
+
+    Spinner spinnerTram;
+    ArrayList<String> mangSpinnerTram;
+    ArrayAdapter adapterSpinnerTram;
+
+    TextView txtThongBao;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        initSpinner();
         getJSON(IPConnect.GET_DANH_SACH, NHIET_DO, dateGraph);
 
         addEvent();
 
+        addEventSpinner();
+
+        getDSKhuVuc(IPConnect.GET_DANH_SACH_TRAM);
+
+    }
+
+    //Thêm trạm, khu vực
+
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if (!Temp.CHECK_USER.equals("admin")) {
+
+            menu.findItem(R.id.menuthemupdate).setVisible(false);
+        }else {
+            menu.findItem(R.id.menuthemupdate).setVisible(true);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void addEventSpinner() {
+        spinnerKV.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                int index = mangSpinnerKV.get(i).lastIndexOf("-");
+                String s = mangSpinnerKV.get(i).substring((index + 1));
+                getDSTramSelected(IPConnect.GET_DS_TRAM_SELECTED,s);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void getDSTramSelected(String url, final String makv){
+        mangSpinnerTram.clear();
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONArray object = null;
+                try {
+                    object = new JSONArray(response);
+                } catch (JSONException e) {
+                    Toast.makeText(MainActivity.this, "Error parse Json", Toast.LENGTH_SHORT).show();
+                }
+
+
+                for (int i = 0; i < object.length(); i++) {
+                    try {
+                        JSONObject obj = object.getJSONObject(i);
+                        String matram = obj.getString("matram");
+                        String tentram = obj.getString("tentram");
+
+                        mangSpinnerTram.add(tentram);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if(mangSpinnerTram.size()==0){
+//                    edtngayBD.setText("");
+//                    edtngayKT.setText("");
+                    txtThongBao.setVisibility(View.VISIBLE);
+                    graph.setVisibility(View.GONE);
+                }else {
+                    txtThongBao.setVisibility(View.GONE);
+                    graph.setVisibility(View.VISIBLE);
+                }
+                adapterSpinnerTram = new ArrayAdapter(MainActivity.this,
+                        android.R.layout.simple_list_item_1, mangSpinnerTram);
+                spinnerTram.setAdapter(adapterSpinnerTram);
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, "Lỗi mạng", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("makv", makv);
+                return map;
+            }
+        };
+        requestQueue.add(stringRequest);
+
+    }
+
+
+    public void getDSKhuVuc(String url) {
+        mangSpinnerKV.clear();
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject obj = response.getJSONObject(i);
+                                String matram = obj.getString("matram");
+                                String tentram = obj.getString("tentram");
+
+                                String item = tentram + "-" + matram;
+                                mangSpinnerKV.add(item);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adapterSpinnerKV = new ArrayAdapter(MainActivity.this,
+                                android.R.layout.simple_list_item_1, mangSpinnerKV);
+                        spinnerKV.setAdapter(adapterSpinnerKV);
+
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, "Lỗi mạng", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        requestQueue.add(jsonArrayRequest);
+//        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(50000, 5, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+    }
+    private void initSpinner() {
+        txtThongBao=findViewById(R.id.txtThongBao);
+        // Spinner Khu vực
+        spinnerKV = findViewById(R.id.spinnerKV);
+        mangSpinnerKV = new ArrayList<>();
+        adapterSpinnerKV = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, mangSpinnerKV);
+        spinnerKV.setAdapter(adapterSpinnerKV);
+        //Spinner Trạm
+        spinnerTram = findViewById(R.id.spinnerTram);
+        mangSpinnerTram = new ArrayList<>();
+        adapterSpinnerTram = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, mangSpinnerTram);
+        spinnerTram.setAdapter(adapterSpinnerTram);
     }
 
     private void addEvent() {
-        edtngay.setOnClickListener(new View.OnClickListener() {
+        edtngayBD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(MainActivity.this);
@@ -98,24 +282,23 @@ public class MainActivity extends AppCompatActivity {
                         int thang = datePicker.getMonth() + 1;
                         int ngay = datePicker.getDayOfMonth();
 
-                        String day="",month="";
+                        String day = "", month = "";
 
-                        if(ngay<10){
-                            day="0"+ngay;
-                        }else {
-                            day=ngay+"";
+                        if (ngay < 10) {
+                            day = "0" + ngay;
+                        } else {
+                            day = ngay + "";
                         }
-                        if(thang<10){
-                            month="0"+thang;
-                        }else {
-                            month=thang+"";
+                        if (thang < 10) {
+                            month = "0" + thang;
+                        } else {
+                            month = thang + "";
                         }
 
-                        String s=nam+"-"+month+"-"+day;
+                        String s = nam + "-" + month + "-" + day;
 
 
-
-                        edtngay.setText(s);
+                        edtngayBD.setText(s);
                         dialog.dismiss();
                     }
                 });
@@ -124,26 +307,61 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        edtngayKT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setTitle("Dialog chọn ngày-tháng-năm");
+                dialog.setContentView(R.layout.dialog_item_ngay_thang);
+                dialog.show();
+                LiveButton btnChonNgay = dialog.findViewById(R.id.btnChonNgay);
+                final DatePicker datePicker = dialog.findViewById(R.id.datePickerOK);
+                btnChonNgay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int nam = datePicker.getYear();
+                        int thang = datePicker.getMonth() + 1;
+                        int ngay = datePicker.getDayOfMonth();
+
+                        String day = "", month = "";
+
+                        if (ngay < 10) {
+                            day = "0" + ngay;
+                        } else {
+                            day = ngay + "";
+                        }
+                        if (thang < 10) {
+                            month = "0" + thang;
+                        } else {
+                            month = thang + "";
+                        }
+
+                        String s = nam + "-" + month + "-" + day;
+
+
+                        edtngayKT.setText(s);
+                        dialog.dismiss();
+                    }
+                });
+            }
+
+        });
 
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ngay = edtngay.getText().toString();
+                String begin = edtngayBD.getText().toString();
 
-                String bd = edtgiobatdau.getText().toString();
-                String kt = edtgioketthuc.getText().toString();
+                String end = edtngayKT.getText().toString();
 
 
-                if (ngay.equals("") || bd.equals("") || kt.equals("")) {
+                if (begin.equals("") || end.equals("")) {
                     Toast.makeText(MainActivity.this, "Mời nhập đầy đủ dữ liệu", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                int gioBD = Integer.parseInt(bd);
-                int gioKT = Integer.parseInt(kt);
 
-
-                DateGraph dg = new DateGraph(ngay, gioBD, gioKT);
+                DateGraph dg = new DateGraph(begin, end);
                 dateGraph = dg;
                 getJSON(IPConnect.GET_DANH_SACH, MY_TYPE, dg);
 
@@ -153,9 +371,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        edtngay = findViewById(R.id.edtngay);
-        edtgiobatdau = findViewById(R.id.edtgiobatdau);
-        edtgioketthuc = findViewById(R.id.edtgioketthuc);
+        graph=findViewById(R.id.graph);
+        edtType = findViewById(R.id.edttype);
+        edtType.setText("Nhiệt độ");
+        edtngayBD = findViewById(R.id.edtngayBD);
+        edtngayKT = findViewById(R.id.edtngayKT);
         btnOk = findViewById(R.id.btnOk);
     }
 
@@ -191,8 +411,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.menunhietdo) {
             MY_TYPE = NHIET_DO;
-            dateGraph = null;
-            resetEdittext();
+            edtType.setText("Nhiệt độ");
+//            resetEdittext();
             Toast.makeText(this, "Đồ thị nhiệt độ", Toast.LENGTH_SHORT).show();
             getJSON(IPConnect.GET_DANH_SACH, NHIET_DO, dateGraph);
 
@@ -200,8 +420,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.menudoam) {
             MY_TYPE = DO_AM;
-            dateGraph = null;
-            resetEdittext();
+            edtType.setText("Độ ẩm");
+//            dateGraph = null;
+//            resetEdittext();
             Toast.makeText(this, "Đồ thị độ ẩm", Toast.LENGTH_SHORT).show();
             getJSON(IPConnect.GET_DANH_SACH, DO_AM, dateGraph);
 
@@ -209,36 +430,83 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.menuco) {
             MY_TYPE = CO;
-            dateGraph = null;
-            resetEdittext();
+            edtType.setText("CO");
+//            dateGraph = null;
+//            resetEdittext();
             Toast.makeText(this, "Đồ thị nồng độ khí CO", Toast.LENGTH_SHORT).show();
             getJSON(IPConnect.GET_DANH_SACH, CO, dateGraph);
 
         }
         if (id == R.id.menubui) {
             MY_TYPE = BUI;
-            dateGraph = null;
-            resetEdittext();
+            edtType.setText("Bụi");
+//            dateGraph = null;
+//            resetEdittext();
             Toast.makeText(this, "Đồ thị nồng độ bụi", Toast.LENGTH_SHORT).show();
             getJSON(IPConnect.GET_DANH_SACH, BUI, dateGraph);
 
         }
         if (id == R.id.menutable) {
 
-           startActivity(new Intent(MainActivity.this, BangDiaChatActivity.class));
+            startActivity(new Intent(MainActivity.this, BangDiaChatActivity.class));
 
 
         }
 
+//        if (id == R.id.menuthemkv) {
+//            startActivity(new Intent(MainActivity.this, ThemKhuVucActivity.class));
+//            finish();
+//        }
+//        if (id == R.id.menuthemtram) {
+//            startActivity(new Intent(MainActivity.this, ThemTramActivity.class));
+//            finish();
+//        }
+
+
+        if (id == R.id.menuthemupdate) {
+            final String mangItems[]={"Thêm khu vực","Thêm trạm"};
+            AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Xác nhận");
+            builder.setIcon(R.drawable.add);
+            builder.setCancelable(false);
+            builder.setSingleChoiceItems(mangItems, -1, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ConstanDataManager.SELECT_ITEM_DIALOG=which;
+                }
+            });
+
+            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    if(ConstanDataManager.SELECT_ITEM_DIALOG==ConstanDataManager.SELECT_THEM_KHU_VUC){
+                       Intent intent= new Intent(MainActivity.this, ThemKhuVucActivity.class);
+                       intent.putExtra(ConstanDataManager.VARIABLE_TRANSLATE,ConstanDataManager.VALUE_GRAPH);
+
+                        startActivity(intent);
+                        finish();
+                    }else if(ConstanDataManager.SELECT_ITEM_DIALOG==ConstanDataManager.SELECT_THEM_TRAM){
+                        Intent intent= new Intent(MainActivity.this, ThemTramActivity.class);
+                        intent.putExtra(ConstanDataManager.VARIABLE_TRANSLATE,ConstanDataManager.VALUE_GRAPH);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            });
+            AlertDialog alertDialog=builder.create();
+            alertDialog.show();
+
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void resetEdittext() {
-        edtngay.setText("");
-        edtgiobatdau.setText("");
-        edtgioketthuc.setText("");
-    }
+//    private void resetEdittext() {
+//        edtngay.setText("");
+//        edtgiobatdau.setText("");
+//        edtgioketthuc.setText("");
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -248,6 +516,10 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_bui, menu);
         getMenuInflater().inflate(R.menu.menu_table, menu);
         getMenuInflater().inflate(R.menu.menu_dang_xuat, menu);
+
+//        getMenuInflater().inflate(R.menu.menu_them_tram, menu);
+//        getMenuInflater().inflate(R.menu.menu_them_kv, menu);
+        getMenuInflater().inflate(R.menu.menu_them_update, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -365,27 +637,21 @@ public class MainActivity extends AppCompatActivity {
 //            index++;
 //            if (index > 8) break;
 //        }
-
+//
+        String []mangX=new String [LabelX.length];
         if (dateGraph != null) {
-            if (!dateGraph.getDate().equals("")) {
 
-                int count = dateGraph.getGioKT() - dateGraph.getGioBD();
-                LabelX = new String[count + 1];
-                int index = 0;
-                for (int i = dateGraph.getGioBD(); i <= dateGraph.getGioKT(); i++) {
-                    LabelX[index++] = i + "";
-                }
+            for (int i = 0; i < LabelX.length; i++) {
+                mangX[i]=LabelX[i];
             }
         } else if (dateGraph == null) {
-            LabelX = new String[18];
-            int index = 0;
-            for (int i = 1; i <= 18; i++) {
-                LabelX[index++] = i + "";
+            for (int i = 0; i < LabelX.length; i++) {
+                mangX[i]=LabelX[i];
             }
         }
 
 
-        return LabelX;
+        return mangX;
     }
 
 
@@ -404,7 +670,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                dialog.cancel();
+                dialog.dismiss();
 
                 graph = (GraphView) findViewById(R.id.graph);
 
@@ -427,31 +693,30 @@ public class MainActivity extends AppCompatActivity {
                                         double tentram = 0;
 
                                         if (dg != null) {
-                                            if (!dg.getDate().equals("")) {
 
-                                                DateCompare dateCompare = getDateCompare(matram);
+                                            DateCompare dateCompare = getDateCompare(matram);
+                                            Date_Custom ct = new Date_Custom(dg.getDateBD(), dg.getDateKT());
+                                            if (ct.ComparDate(dateCompare.getDate())) {
 
-                                                if (dateCompare.getDate().equals(dg.getDate())) {
-                                                    if (dateCompare.getGio() >= dg.getGioBD() && dateCompare.getGio() <= dg.getGioKT()) {
-                                                        mangX.add((double) dateCompare.getGio());
-                                                        Toast.makeText(MainActivity.this, "gio="+dateCompare.getGio(), Toast.LENGTH_SHORT).show();
+                                                mangX.add((double) dateCompare.getGio());
+//                                                Toast.makeText(MainActivity.this, "gio=" + dateCompare.getGio(), Toast.LENGTH_SHORT).show();
 
-                                                        if (type == NHIET_DO) {
-                                                            tentram = obj.getDouble("temperature");
 
-                                                        } else if (type == DO_AM) {
-                                                            tentram = obj.getDouble("humidity");
-                                                        } else if (type == CO) {
-                                                            tentram = obj.getDouble("co");
-                                                        } else if (type == BUI) {
-                                                            tentram = obj.getDouble("bui");
-                                                        }
-                                                        mangY.add(tentram);
+                                                if (type == NHIET_DO) {
+                                                    tentram = obj.getDouble("temperature");
 
-                                                    }
+                                                } else if (type == DO_AM) {
+                                                    tentram = obj.getDouble("humidity");
+                                                } else if (type == CO) {
+                                                    tentram = obj.getDouble("co");
+                                                } else if (type == BUI) {
+                                                    tentram = obj.getDouble("bui");
                                                 }
+                                                mangY.add(tentram);
+                                                LabelX[i]=getItemDate(matram);
+
                                             }
-                                        }else if(dg==null){
+                                        } else if (dg == null) {
                                             DateCompare dateCompare = getDateCompare(matram);
                                             mangX.add((double) dateCompare.getGio());
                                             if (type == NHIET_DO) {
@@ -465,22 +730,9 @@ public class MainActivity extends AppCompatActivity {
                                                 tentram = obj.getDouble("bui");
                                             }
                                             mangY.add(tentram);
+                                            LabelX[i]=getItemDate(matram);
 
                                         }
-
-
-//                                        int numberOfString = getNumberOfString(matram);
-//
-//                                        if (i == 0)
-//                                            myDate = GetDate(matram);
-//
-//                                        if (i == (response.length() - 1)) {
-//                                            myDateLast = GetDate(matram);
-//                                        }
-//                                        Toast.makeText(MainActivity.this, "m="+numberOfString, Toast.LENGTH_SHORT).show();
-//
-//                                        mangX.add((double) numberOfString);
-//                                        mangY.add(tentram);
 
 
                                     } catch (JSONException e) {
@@ -517,6 +769,24 @@ public class MainActivity extends AppCompatActivity {
         }.start();
 
 
+    }
+
+    private  String getItemDate(String value){
+        int end = value.indexOf(" ");
+        int begin = value.indexOf("-");
+        String my_date = value.substring((begin+1), end);
+        String[] split = my_date.split("-");
+        int day=0;
+        int month=0;
+        try{
+            day=Integer.parseInt(split[1]);
+            month=Integer.parseInt(split[0]);
+        }catch (Exception ex){
+            Toast.makeText(this, "Error parse date", Toast.LENGTH_SHORT).show();
+            return "";
+        }
+        String result=day+"/"+month;
+        return result;
     }
 
     private DateCompare getDateCompare(String value) {

@@ -7,25 +7,33 @@
     android:orientation="vertical">
 
 
-    <DatePicker
-        android:id="@+id/datePickerOK"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"></DatePicker>
-    <ru.katso.livebutton.LiveButton
-        android:id="@+id/btnChonNgay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Chọn"
-        android:textColor="#241cff"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        app:backgroundColor="#17da14"
-        app:corners="0sp"
-        app:normalHeight="5dp"
-        app:pressedHeight="2dp"
-        app:shadowColor="#3c57d9" />
+        android:layout_height="wrap_content">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <DatePicker
+                android:id="@+id/datePickerOK"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"></DatePicker>
+            <ru.katso.livebutton.LiveButton
+                android:id="@+id/btnChonNgay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Chọn"
+                android:textColor="#241cff"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                app:backgroundColor="#17da14"
+                app:corners="0sp"
+                app:normalHeight="5dp"
+                app:pressedHeight="2dp"
+                app:shadowColor="#3c57d9" />
+        </TableLayout>
+    </ScrollView>
 </LinearLayout>

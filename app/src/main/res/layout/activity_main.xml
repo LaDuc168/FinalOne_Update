@@ -7,62 +7,124 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:weightSum="7"
-            android:orientation="horizontal"
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edtngay"
-                android:layout_weight="2"
-                android:hint="Chọn ngày"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
 
-            <EditText
-                android:id="@+id/edtgiobatdau"
-                android:layout_weight="2"
-                android:hint="Giờ bắt đầu"
-                android:inputType="number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/edtgioketthuc"
-                android:layout_weight="2"
-                android:hint="Giờ kết thúc"
-                android:inputType="number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-
-            <ru.katso.livebutton.LiveButton
-                android:id="@+id/btnOk"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:text="Ok"
-                android:textColor="#0b0b0b"
-                android:textSize="35dp"
-                android:textStyle="bold"
-                app:backgroundColor="#ffcc00"
-                app:corners="0sp"
-                app:normalHeight="5dp"
-                app:pressedHeight="2dp"
-                app:shadowColor="#b7bac9" />
-        </LinearLayout>
-        <com.jjoe64.graphview.GraphView
-            android:id="@+id/graph"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Chọn khu vực" />
 
-    </LinearLayout>
+            <Spinner
+                android:id="@+id/spinnerKV"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_edittext"></Spinner>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Chọn trạm" />
+
+            <Spinner
+                android:id="@+id/spinnerTram"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_edittext"></Spinner>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="#d7d5d5" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="7">
+
+                <EditText
+                    android:id="@+id/edttype"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/custom_edittext"
+                    android:enabled="false"
+                    android:hint="Type"
+                    android:textColor="#e20d0d"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtngayBD"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/custom_edittext"
+                    android:hint="Begin" />
+
+                <EditText
+                    android:id="@+id/edtngayKT"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/custom_edittext"
+                    android:hint="End" />
+
+
+                <ru.katso.livebutton.LiveButton
+                    android:id="@+id/btnOk"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="Gửi"
+                    android:textColor="#0b0b0b"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:backgroundColor="#ffcc00"
+                    app:corners="0sp"
+                    app:normalHeight="5dp"
+                    app:pressedHeight="2dp"
+                    app:shadowColor="#b7bac9" />
+            </LinearLayout>
+
+            <com.jjoe64.graphview.GraphView
+                android:layout_marginTop="15dp"
+                android:id="@+id/graph"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/txtThongBao"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="#ef190e"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:text="Trạm chưa được lắp đặt"
+                android:textSize="25sp"
+                android:layout_height="wrap_content" />
+
+
+        </TableLayout>
+    </ScrollView>
 
 </LinearLayout>

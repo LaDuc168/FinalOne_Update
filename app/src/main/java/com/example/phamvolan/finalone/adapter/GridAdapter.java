@@ -1,6 +1,7 @@
 package com.example.phamvolan.finalone.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,13 @@ public class GridAdapter extends BaseAdapter {
         convertView=inflater.inflate(R.layout.row_item_grid,null);
 
         Button btn=convertView.findViewById(R.id.btnGrid);
+        if(position==0|| position==1){
+            btn.setBackgroundColor(Color.GREEN);
+
+        }
+        else{
+            btn.setBackgroundColor(Color.YELLOW);
+        }
 
         String value=lstSource.get(position);
         btn.setText(value);
