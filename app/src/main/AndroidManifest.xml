@@ -19,17 +19,17 @@
         </activity>
         <activity android:name=".activity.DanhSachThanhPhoActivity"></activity>
         <activity android:name=".activity.DangNhapActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activity.DangKiActivity" />
         <activity android:name=".activity.ThemKhuVucActivity" />
         <activity android:name=".activity.ThemTramActivity" />
         <activity android:name=".activity.BangDiaChatActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

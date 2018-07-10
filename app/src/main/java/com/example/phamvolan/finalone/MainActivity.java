@@ -146,6 +146,30 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        spinnerTram.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                int index = mangSpinnerKV.get(i).lastIndexOf("-");
+//                String s = mangSpinnerKV.get(i).substring((index + 1));
+
+                if(!mangSpinnerTram.get(i).equals(ConstanDataManager.CONSTAN_TRAM)){
+//                    edtngayBD.setText("");
+//                    edtngayKT.setText("");
+                    txtThongBao.setVisibility(View.VISIBLE);
+                    graph.setVisibility(View.GONE);
+                }else {
+                    txtThongBao.setVisibility(View.GONE);
+                    graph.setVisibility(View.VISIBLE);
+                }
+//                getDSTramSelected(IPConnect.GET_DS_TRAM_SELECTED,s);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void getDSTramSelected(String url, final String makv){
@@ -175,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                if(mangSpinnerTram.size()==0){
+                if(mangSpinnerTram.size()==0 || !ConstanDataManager.CheckTram(mangSpinnerTram)){
 //                    edtngayBD.setText("");
 //                    edtngayKT.setText("");
                     txtThongBao.setVisibility(View.VISIBLE);

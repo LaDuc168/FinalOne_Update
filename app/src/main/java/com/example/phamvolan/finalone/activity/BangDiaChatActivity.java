@@ -166,6 +166,30 @@ public class BangDiaChatActivity extends AppCompatActivity {
 
 
 
+        spinnerTram.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                int index = mangSpinnerKV.get(i).lastIndexOf("-");
+//                String s = mangSpinnerKV.get(i).substring((index + 1));
+
+                if(!mangSpinnerTram.get(i).equals(ConstanDataManager.CONSTAN_TRAM)){
+//                    edtngayBD.setText("");
+//                    edtngayKT.setText("");
+                    txtThongBao.setVisibility(View.VISIBLE);
+                    gridView.setVisibility(View.GONE);
+                }else {
+                    txtThongBao.setVisibility(View.GONE);
+                    gridView.setVisibility(View.VISIBLE);
+                }
+//                getDSTramSelected(IPConnect.GET_DS_TRAM_SELECTED,s);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         edtngayBD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -307,7 +331,7 @@ public class BangDiaChatActivity extends AppCompatActivity {
                     }
                 }
 
-                if(mangSpinnerTram.size()==0){
+                if(mangSpinnerTram.size()==0 || !ConstanDataManager.CheckTram(mangSpinnerTram)){
 //                    edtngayBD.setText("");
 //                    edtngayKT.setText("");
                     txtThongBao.setVisibility(View.VISIBLE);
@@ -339,6 +363,8 @@ public class BangDiaChatActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
+
+
 
 
     private void init() {
