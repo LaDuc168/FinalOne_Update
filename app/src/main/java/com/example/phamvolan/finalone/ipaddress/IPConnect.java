@@ -15,5 +15,6 @@ public class IPConnect {
     public static final String THEM_KHU_VUC="http://"+IP+"/diachat/themkhuvuc.php";
     public static final String GET_DS_TRAM_SELECTED="http://"+IP+"/diachat/getdstram.php";
     public static final String XOA_TAI_KHOAN="http://"+IP+"/diachat/xoataikhoan.php";
+    public static final String GET_DACH_SACH_USER="http://"+IP+"/diachat/getdanhsachuser.php";
 
 }

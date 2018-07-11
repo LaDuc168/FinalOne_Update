@@ -40,21 +40,48 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/custom_edittext" />
 
-    <ru.katso.livebutton.LiveButton
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="20dp"
-        android:id="@+id/btnXoa"
+
+
+
+    <LinearLayout
         android:layout_width="match_parent"
+
         android:layout_height="50dp"
-        android:text="Xóa"
-        android:textColor="#0b0b0b"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        app:backgroundColor="#ffcc00"
-        app:corners="0sp"
-        app:normalHeight="5dp"
-        app:pressedHeight="2dp"
-        app:shadowColor="#b7bac9" />
+        android:layout_marginTop="25dp"
+        android:weightSum="2">
+
+        <ru.katso.livebutton.LiveButton
+            android:id="@+id/btnXoa"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:text="Login"
+            android:textColor="#0b0b0b"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            app:backgroundColor="#ffcc00"
+            app:corners="0sp"
+            app:normalHeight="5dp"
+            app:pressedHeight="2dp"
+            app:shadowColor="#b7bac9" />
+
+        <ru.katso.livebutton.LiveButton
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="#0b0b0b"
+            android:textSize="35dp"
+            android:textStyle="bold"
+            app:backgroundColor="#ffcc00"
+            app:corners="0sp"
+            app:normalHeight="5dp"
+            app:pressedHeight="2dp"
+            app:shadowColor="#b7bac9" />
+
+    </LinearLayout>
 
 </LinearLayout>

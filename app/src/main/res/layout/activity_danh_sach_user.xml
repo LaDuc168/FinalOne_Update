@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".activity.DanhSachUserActivity">
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="DANH SÁCH USER"
+        android:textColor="#00a680"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:layout_below="@+id/txtTitle"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:id="@+id/listViewUser"
+        android:layout_height="wrap_content"></ListView>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_weight="1"
+        android:id="@+id/imgBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/imgback"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"/>
+</RelativeLayout>

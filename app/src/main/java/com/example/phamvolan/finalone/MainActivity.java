@@ -30,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.phamvolan.finalone.activity.BangDiaChatActivity;
 import com.example.phamvolan.finalone.activity.DangNhapActivity;
 import com.example.phamvolan.finalone.activity.DanhSachThanhPhoActivity;
+import com.example.phamvolan.finalone.activity.DanhSachUserActivity;
 import com.example.phamvolan.finalone.activity.ThemKhuVucActivity;
 import com.example.phamvolan.finalone.activity.ThemTramActivity;
 import com.example.phamvolan.finalone.ipaddress.IPConnect;
@@ -126,8 +127,10 @@ public class MainActivity extends AppCompatActivity {
         if (!Temp.CHECK_USER.equals("admin")) {
 
             menu.findItem(R.id.menuthemupdate).setVisible(false);
+            menu.findItem(R.id.menuxoauser).setVisible(false);
         }else {
             menu.findItem(R.id.menuthemupdate).setVisible(true);
+            menu.findItem(R.id.menuxoauser).setVisible(true);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -476,6 +479,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+        if (id == R.id.menuxoauser) {
+
+            startActivity(new Intent(MainActivity.this, DanhSachUserActivity.class));
+
+
+        }
 
 //        if (id == R.id.menuthemkv) {
 //            startActivity(new Intent(MainActivity.this, ThemKhuVucActivity.class));
@@ -534,6 +543,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu_nhiet_do, menu);
         getMenuInflater().inflate(R.menu.menu_do_am, menu);
         getMenuInflater().inflate(R.menu.menu_co, menu);
@@ -544,6 +554,7 @@ public class MainActivity extends AppCompatActivity {
 //        getMenuInflater().inflate(R.menu.menu_them_tram, menu);
 //        getMenuInflater().inflate(R.menu.menu_them_kv, menu);
         getMenuInflater().inflate(R.menu.menu_them_update, menu);
+        getMenuInflater().inflate(R.menu.menu_xoa_user, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -15,16 +15,16 @@
             android:name=".MainActivity"
             android:screenOrientation="landscape">
 
-
         </activity>
-        <activity android:name=".activity.DanhSachThanhPhoActivity"></activity>
+        <activity android:name=".activity.DanhSachThanhPhoActivity" />
         <activity android:name=".activity.DangNhapActivity">
 
         </activity>
         <activity android:name=".activity.DangKiActivity" />
         <activity android:name=".activity.ThemKhuVucActivity" />
         <activity android:name=".activity.ThemTramActivity" />
-        <activity android:name=".activity.BangDiaChatActivity">
+        <activity android:name=".activity.BangDiaChatActivity"></activity>
+        <activity android:name=".activity.DanhSachUserActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

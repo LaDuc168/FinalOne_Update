@@ -33,6 +33,7 @@ import com.example.phamvolan.finalone.R;
 import com.example.phamvolan.finalone.adapter.GridAdapter;
 import com.example.phamvolan.finalone.adapter.ThanhPhoAdapter;
 import com.example.phamvolan.finalone.ipaddress.IPConnect;
+import com.example.phamvolan.finalone.ipaddress.Temp;
 import com.example.phamvolan.finalone.model.ConstanDataManager;
 import com.example.phamvolan.finalone.model.DateCompare;
 import com.example.phamvolan.finalone.model.DateGraph;
@@ -85,6 +86,17 @@ public class BangDiaChatActivity extends AppCompatActivity {
     private static final int CO = 2;
     private static final int BUI = 3;
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if (!Temp.CHECK_USER.equals("admin")) {
+
+            menu.findItem(R.id.menuthemupdate).setVisible(false);
+        }else {
+            menu.findItem(R.id.menuthemupdate).setVisible(true);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

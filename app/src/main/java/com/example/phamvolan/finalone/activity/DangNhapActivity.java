@@ -100,6 +100,7 @@ public class DangNhapActivity extends AppCompatActivity {
 
 
                 final Dialog dialog = new Dialog(DangNhapActivity.this);
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.setContentView(R.layout.xoa_tai_khoan);
                 dialog.setTitle("Xóa tài khoản");
 
@@ -108,6 +109,7 @@ public class DangNhapActivity extends AppCompatActivity {
                 final EditText edtmk = dialog.findViewById(R.id.edtmk);
 
                 LiveButton btnXoa = dialog.findViewById(R.id.btnXoa);
+                LiveButton btnCancel = dialog.findViewById(R.id.btnCancel);
 
                 btnXoa.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -125,6 +127,13 @@ public class DangNhapActivity extends AppCompatActivity {
 
                         dialog.dismiss();
 
+                    }
+                });
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
                     }
                 });
                 dialog.show();
